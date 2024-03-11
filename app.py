@@ -45,8 +45,6 @@ print(walls)
 def api_datapointSlab():
     command = """
 import bpy
-#obj = bpy.context.active_object
-#mesh = obj.data
 walls = [[obj.name,obj.BIMObjectProperties.ifc_definition_id] for obj in bpy.context.scene.objects if obj.name.startswith("IfcSlab")]
 print(walls)
 """
