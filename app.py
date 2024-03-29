@@ -8,6 +8,9 @@ app = Flask('app')
 @app.route('/')
 def index():
   return render_template('index.html')
+@app.route('/loadIFC')
+def load_ifc():
+  return render_template('ifc_csv_load.html')
 
 @app.route('/api/datapoint')
 def api_datapoint():
