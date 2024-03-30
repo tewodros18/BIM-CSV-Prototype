@@ -1,0 +1,105 @@
+{%extends "base.html"%} 
+
+{%block title%} 
+Gantt Chart
+{% endblock %}
+
+{%block body%} 
+
+<div class="container-fluid">
+    <div class="row flex-nowrap justify-content-start" width="100%">
+      <div class="col-3" style="padding-top: 3%; padding-left: 3%; padding-bottom: 38%; margin-bottom: -2%;">
+            <button onclick="getImage()" class="btn btn-dark">Issues</button>
+            <button onclick="takeSnap()" class="btn btn-dark">Snapshot</button>
+            <div style="height: 100;"></div>
+      </div>
+      <div class="col">
+        <div class="card-columns" id="pic"></div>
+    </div>
+</div>
+
+
+
+<script>
+    var imageElement = document.getElementById("snippet");
+    var divelem = document.getElementById("pic");
+    function getImage() {
+        url = "/getpic";
+        axios.get(url, {
+            params: {
+            ID: 0
+            }
+        })
+        .then(function (response) {
+            //console.log(response.data)
+            divelem.innerHTML =""
+            response.data.forEach((image,i) => {
+                card = `<div class="card" style="width: 22rem;">
+                        <img class="card-img-top" src=${image} alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Issue Name</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Explore</a>
+                        </div>
+                        </div>`
+            const element = document.createElement('div');
+            element.innerHTML = card;
+            
+            divelem.appendChild(element.firstChild)
+            });
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
+    }
+
+    function getNewImage() {
+        url = "/getnewpic";
+        axios.get(url, {
+            params: {
+            ID: 0
+            }
+        })
+        .then(function (response) {
+            //console.log(response.data)
+            divelem.innerHTML =""
+            card = `<div class="card" style="width: 50rem;">
+                        <img class="card-img-top" src=${response.data} alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Issue Name</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Save</a>
+                        </div>
+                        </div>`
+            const element = document.createElement('div');
+            element.innerHTML = card;
+            
+            divelem.appendChild(element.firstChild)
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
+    }
+
+    function takeSnap() {
+        url = "/takesnap";
+        axios.get(url)
+        .then(function(response) {
+            console.log(response)
+            getNewImage()
+      })
+      .catch(function(error) {
+          console.log(error);
+      });
+    }
+
+
+</script>
+
+{% endblock %}
