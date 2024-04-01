@@ -1,8 +1,10 @@
-from flask import Flask, render_template, jsonify, send_file
+from flask import Flask, render_template, jsonify
 from datetime import datetime
 import socket
 import base64
 import os
+
+from BlenderScreenCap import BlenderScreenCapcommand
 
 app = Flask('app')
 
@@ -35,12 +37,9 @@ def takeSnap():
     for file_names in os.listdir(filpath):
         img = file_names
     img = str(int(img.split(".")[0]) + 1) + ".png"
-    command = """
-import bpy
-bpy.ops.screen.screenshot(filepath=r"C:/Users/Teddy/Documents/vs_code/GSOC2024/prototype/BIM-CSV-Prototype/static/image/snaps/{}")
-""".format(img)
+    command = BlenderScreenCapcommand.format(img)
     clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    clientsocket.connect(('localhost', 5232))
+    clientsocket.connect(('localhost', 5200))
     clientsocket.sendall(command.encode())
     while True:
         res = clientsocket.recv(4096)
@@ -67,7 +66,7 @@ walls = [[obj.name,obj.BIMObjectProperties.ifc_definition_id] for obj in bpy.con
 print(walls)
 """
     clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    clientsocket.connect(('localhost', 5235))
+    clientsocket.connect(('localhost', 5200))
     clientsocket.sendall(command.encode())
     while True:
         res = clientsocket.recv(4096)
@@ -97,7 +96,7 @@ walls = [[obj.name,obj.BIMObjectProperties.ifc_definition_id] for obj in bpy.con
 print(walls)
 """
     clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    clientsocket.connect(('localhost', 5235))
+    clientsocket.connect(('localhost', 5200))
     clientsocket.sendall(command.encode())
     while True:
         res = clientsocket.recv(4096)

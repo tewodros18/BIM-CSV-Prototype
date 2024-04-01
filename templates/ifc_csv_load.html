@@ -5,5 +5,86 @@ IFC CSV
 {% endblock %}
 
 {%block body%} 
-<h1>Welcome to your Load</h1> 
+<div class="container-fluid">
+    <div class="row flex-nowrap justify-content-start" width="100%">
+      <div class="col-3" style="padding-top: 3%; padding-left: 3%; padding-bottom: 38%; margin-bottom: -2%; margin-left: 10px; margin-top: 3px; background-color:  darkgrey; border-radius: 25px;">
+            <button onclick="Walls()" class="btn btn-dark">Get Walls</button>
+            <button onclick="Slabs()" class="btn btn-dark">Get Slabs</button>
+            <button onclick="Clear()" class="btn btn-dark">Clear</button>
+
+            <div style="height: 100;"></div>
+      </div>
+      <div class="col" style="margin: 15px; margin-top: 3px;">
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    const tableBody = document.querySelector('tbody');
+    const tableHeader = document.querySelector('thead')
+    function Clear(){
+        tableBody.innerHTML = ""
+        for (let i = 0; i < 50; i++) {
+          let tr = document.createElement('tr');
+          tr.innerHTML = `
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>`
+          tableBody.append(tr)
+        }
+
+    }
+    function Slabs(){
+        tableBody.innerHTML = ""
+        url = "/api/datapointSlab";
+        axios.get(url)
+        .then(function(response) {
+            data = eval(response.data.random_number);
+            for (let i = 0; i < data.length; i++) {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `<td>${data[i][0]}</td>
+                <td>${data[i][1]}</td>`
+                tableBody.append(tr)
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+
+    }
+
+    function Walls(){
+        tableBody.innerHTML = ""
+        url = "/api/datapoint";
+        axios.get(url)
+        .then(function(response) {
+            data = eval(response.data.random_number);
+            for (let i = 0; i < data.length; i++) {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `<td>${data[i][0]}</td>
+                <td>${data[i][1]}</td>`
+                tableBody.append(tr)
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+
+    }
+    window.onload = Clear
+</script>
+
 {% endblock %}
